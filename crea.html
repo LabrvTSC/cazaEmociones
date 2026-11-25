@@ -11,6 +11,18 @@
   .mono{font-family:Consolas,"Courier New",monospace;font-weight:700;letter-spacing:.05em}
   canvas#gl{position:absolute;inset:0;display:block}
   #menu{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3.6vh;background:radial-gradient(ellipse at center,#141c33 0%,#0B0F1A 70%);z-index:5;transition:opacity .6s}
+  .edu{background:#121829;border:1px solid var(--line);border-radius:18px;padding:16px 18px;max-width:620px;width:100%;text-align:left}
+  .edu-head{display:flex;align-items:center;gap:10px;font-size:clamp(12px,3.2vw,16px);margin-bottom:8px}
+  .edu-face{width:30px;height:30px;border-radius:50%;flex:none;box-shadow:0 0 16px currentColor}
+  .edu-txt{font-size:clamp(15px,4vw,19px);line-height:1.45;color:var(--text);margin-bottom:8px}
+  .edu-lab{font-size:clamp(13px,3.4vw,16px);line-height:1.4;color:var(--muted);margin-bottom:10px}
+  .edu-btns{margin-bottom:10px}
+  .edu-say{background:transparent;color:var(--acc);border:2px solid var(--acc);border-radius:12px;padding:7px 14px;font-size:clamp(13px,3.4vw,16px);cursor:pointer}
+  .edu-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:clamp(11px,3vw,14px);color:var(--muted)}
+  .edu-chip{background:transparent;border:1.5px solid;border-radius:20px;padding:4px 10px;font-size:clamp(11px,3vw,14px);cursor:pointer}
+  #eduWrap{position:fixed;inset:0;z-index:20;display:none;flex-direction:column;align-items:center;justify-content:flex-start;gap:14px;padding:5vh 5vw;overflow-y:auto;background:rgba(11,15,26,.9)}
+  #eduWrap.on{display:flex}
+  #eduWrap .edu{margin-top:auto} #eduClose{margin-bottom:auto;font-family:Consolas,monospace;font-weight:700;font-size:clamp(15px,4vw,20px);background:var(--acc);color:#06221D;border:none;border-radius:14px;padding:12px 24px;cursor:pointer}
   #menu.hide{opacity:0;pointer-events:none}
   #menu h1{font-size:clamp(30px,5vw,84px);color:var(--acc);text-shadow:0 0 24px rgba(46,230,197,.35)}
   #menu p{font-size:clamp(15px,1.6vw,26px);color:var(--muted);max-width:74vw;text-align:center}
@@ -76,7 +88,7 @@
   <h1 class="mono">CREA UNA EMOCIÓN</h1>
   <p>Elegid una emoción. El ordenador construirá en directo un mundo y una música para provocarla.</p>
   <div class="grid" id="grid"></div>
-  <p class="mono" style="font-size:clamp(11px,1vw,16px)">Las 6 emociones básicas (Ekman) + calma · Dentro: A D / ← → moverte · W S / ↑ ↓ subir y bajar · 1-7 emoción · ESPACIO otro mundo · M mapa · N silencio · ESC volver</p>
+  <p class="mono" style="font-size:clamp(11px,1vw,16px)">Las 6 emociones básicas (Ekman) + calma · Dentro: A D / ← → moverte · W S / ↑ ↓ subir y bajar · 1-7 emoción · ESPACIO otro mundo · M mapa · N silencio · ESC volver (y la emoción te cuenta quién es)</p>
   <div style="display:flex;gap:3vw"><a class="mono" href="index.html" style="color:var(--acc);font-size:clamp(11px,1vw,16px)">← Todos los juegos</a><a class="mono" href="caza.html" style="color:var(--gold);font-size:clamp(11px,1vw,16px)">¿Con el móvil? Juega a Caza de emociones →</a></div>
 </div>
 
@@ -97,6 +109,7 @@
   <div class="tb"><button id="tw">OTRO MUNDO</button><button id="tm">MAPA</button><button id="ti">INFO</button><button id="ts">SONIDO</button><button id="tx">MENÚ</button></div></div>
 <div id="bigwrap"><canvas id="bigmap" width="560" height="560"></canvas><div id="bighint" class="mono">Pincha en el mapa o usa las flechas / WASD · M (o MAPA) para salir</div></div>
 <div id="flash"></div>
+<div id="eduWrap"><div class="edu" id="edu"></div><button id="eduClose">VOLVER AL MENÚ</button></div>
 
 <script>
 /**
@@ -121,6 +134,54 @@ const hsl = (h, s, l) => new THREE.Color().setHSL((((h % 360) + 360) % 360) / 36
 // REGLAS DE CADA EMOCIÓN (las 6 básicas de Ekman + calma)
 // va/ar: posición aproximada en el mapa de Russell (valencia, activación)
 // =====================================================================
+// ===== Explicación educativa contada por las propias emociones (común a los dos juegos) =====
+const EDU = {
+  alegria: {
+    n: "Alegría", c: "#F6C344",
+    t: "¡Hola! Soy la Alegría. En el mapa de Russell vivo arriba a la derecha: soy agradable y te doy energía. Aparezco cuando consigues algo o compartes un buen rato, y te empujo a repetirlo y a acercarte a los demás. Para despertarme con música se suelen usar ritmos rápidos y tonos mayores.",
+  },
+  tristeza: {
+    n: "Tristeza", c: "#7FA3C9",
+    t: "Hola, soy la Tristeza. Vivo abajo a la izquierda del mapa: soy desagradable y te dejo con poca energía. Aunque no lo parezca, sirvo para algo: te hago ir más despacio cuando pierdes algo importante y ayudo a que los demás se den cuenta de que necesitas apoyo. Mi música suele ser lenta y en tono menor.",
+  },
+  miedo: {
+    n: "Miedo", c: "#FF5C7A",
+    t: "¡Buh! Soy el Miedo. Vivo arriba a la izquierda: desagradable y con mucha activación. Soy tu alarma: cuando detecto un peligro, tu corazón se acelera y tu cuerpo se prepara para huir o protegerse. Sin mí no tendrías cuidado al cruzar la calle.",
+  },
+  ira: {
+    n: "Ira", c: "#FF7A2E",
+    t: "Soy la Ira. Vivo arriba a la izquierda, muy alto: desagradable y con muchísima activación. Aparezco cuando algo te parece injusto o alguien bloquea lo que quieres. Te doy energía para defender tus límites. El truco está en usar esa energía para decir lo que sientes, no para hacer daño.",
+  },
+  asco: {
+    n: "Asco", c: "#A8D63A",
+    t: "Puaj, soy el Asco. Soy desagradable pero no te activo tanto. Mi trabajo original es protegerte de comida estropeada o de cosas que podrían ponerte enfermo: por eso arrugas la nariz y te apartas. Con el tiempo también aprendí a reaccionar ante cosas que nos parecen moralmente feas.",
+  },
+  sorpresa: {
+    n: "Sorpresa", c: "#B38CFF",
+    t: "¡Oh! Soy la Sorpresa, la emoción más breve de todas. Te activo muchísimo, pero no soy ni buena ni mala: depende de lo que venga después. Abro tus ojos y tu atención para que entiendas qué ha pasado de repente, y enseguida dejo paso a otra emoción.",
+  },
+  calma: {
+    n: "Calma", c: "#7EE0C8",
+    t: "Hola, soy la Calma. Vivo abajo a la derecha: agradable y con poca activación. Aparezco cuando te sientes a salvo, y le doy a tu cuerpo tiempo para recuperarse: respiras más despacio y tu corazón va más tranquilo. En realidad virtual se me suele invitar con paisajes abiertos, agua y música suave.",
+  },
+};
+const EDU_LAB = "En el laboratorio de Irene te pondríamos unas gafas de realidad virtual y una diadema EEG para ver qué cambia en tu actividad cerebral al sentirnos. Los artefactos rojos del juego son el \"ruido\" que hay que limpiar de esa señal. Y recuerda: ninguna emoción es mala, todas servimos para algo.";
+function eduSpeak(text){
+  try{ if (!window.speechSynthesis) return; speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = "es-ES"; u.rate = 1;
+    const v = speechSynthesis.getVoices().find(v => /^es/i.test(v.lang)); if (v) u.voice = v; speechSynthesis.speak(u); }catch(e){}
+}
+function eduStop(){ try{ if (window.speechSynthesis) speechSynthesis.cancel(); }catch(e){} }
+// Pinta el bocadillo en "box" con la emoción "k" y botones para conocer a las demás
+function eduRender(box, k, intro){
+  const e = EDU[k], keys = Object.keys(EDU);
+  box.innerHTML = `<div class="edu-head"><span class="edu-face" style="background:${e.c}"></span><span class="mono" style="color:${e.c}">${intro || "TE HABLA LA EMOCIÓN"} · ${e.n.toUpperCase()}</span></div>
+    <p class="edu-txt">${e.t}</p><p class="edu-lab">${EDU_LAB}</p>
+    <div class="edu-btns"><button class="edu-say mono">ESCUCHAR</button></div>
+    <div class="edu-chips"><span class="mono">Conoce a las demás:</span>${keys.filter(x => x !== k).map(x => `<button class="edu-chip mono" data-k="${x}" style="border-color:${EDU[x].c};color:${EDU[x].c}">${EDU[x].n}</button>`).join("")}</div>`;
+  box.querySelector(".edu-say").onclick = () => eduSpeak(e.t + " " + EDU_LAB);
+  box.querySelectorAll(".edu-chip").forEach(b => b.onclick = () => { eduStop(); eduRender(box, b.dataset.k, "TE HABLA LA EMOCIÓN"); });
+}
+
 const EMO = {
   alegria: { nombre: "ALEGRÍA", color: "#FFD45C", sw: "radial-gradient(circle at 35% 30%,#fff3a0,#ff7aa8)", va: .8, ar: .5,
     hues: [[0, 360]], sat: [.75, .95], skyL: [.55, .7], groundL: [.35, .6], fog: [.005, .009],
@@ -586,7 +647,8 @@ function drawBig(w){
   x.strokeStyle = "rgba(255,255,255,.5)"; x.setLineDash([6, 6]); x.beginPath(); x.moveTo(cx, cy); x.lineTo(tx, ty); x.stroke(); x.setLineDash([]);
   x.fillStyle = "#fff"; x.beginPath(); x.arc(cx, cy, 11, 0, 6.28); x.fill(); x.strokeStyle = "#0B0F1A"; x.lineWidth = 4; x.stroke();
 }
-function toMenu(){ running = false; audio.stop(); if (mapMode) exitMap(); clearGame(); $("touch").classList.remove("on"); $("menu").classList.remove("hide"); $("hud").style.display = "none"; }
+function toMenu(){ const was = running ? curEmo() : null; if (was){ eduRender($("edu"), was, "ANTES DE IRTE, TE HABLA LA EMOCIÓN"); $("eduWrap").classList.add("on"); }
+  running = false; audio.stop(); if (mapMode) exitMap(); clearGame(); $("touch").classList.remove("on"); $("menu").classList.remove("hide"); $("hud").style.display = "none"; }
 // Sorpresa: cosas inesperadas cada pocos segundos
 function surpriseEvent(){
   const k = RI(0, 3);
@@ -614,9 +676,10 @@ ORDER.forEach((k, i) => { const e = EMO[k], b = document.createElement("button")
   b.addEventListener("click", () => setEmotion(k)); $("grid").appendChild(b); });
 addEventListener("keydown", e => {
   keys[e.code] = true;
+  if ($("eduWrap").classList.contains("on")){ if (e.code === "Escape" || e.code === "Enter") closeEdu(); return; }
   const d = e.code.match(/^(Digit|Numpad)([1-7])$/); if (d) setEmotion(ORDER[+d[2] - 1]);
   if (e.code === "Space" && emoKey){ e.preventDefault(); setEmotion(mapMode ? dominant : emoKey); }
-  if (e.code === "Escape") toMenu();
+  if (e.code === "Escape"){ if ($("eduWrap").classList.contains("on")) closeEdu(); else toMenu(); }
   if (e.code === "KeyN") audio.toggleMute();
   if (e.code === "KeyM" && running){ if (mapMode) exitMap(); else enterMap(); }
   if (e.code.startsWith("Arrow")) e.preventDefault();
@@ -767,6 +830,8 @@ function drawEEG(dt, t){
   for (let i = 0; i < eegBuf.length; i++){ const px = i / (eegBuf.length - 1) * Wd, py = Hd/2 - Math.max(-1.6, Math.min(1.6, eegBuf[i])) * Hd * .28; i ? x.lineTo(px, py) : x.moveTo(px, py); }
   x.stroke();
 }
+function closeEdu(){ eduStop(); $("eduWrap").classList.remove("on"); }
+$("eduClose").addEventListener("click", closeEdu);
 // controles táctiles
 (() => {
   const hold = (id, on) => { const b = $(id); const st = v => ev => { ev.preventDefault(); on(v); b.classList.toggle("on", v); };
