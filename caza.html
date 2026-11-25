@@ -40,6 +40,16 @@
   .arrow{position:absolute;width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-bottom:24px solid #fff;filter:drop-shadow(0 0 6px rgba(0,0,0,.8));transform-origin:50% 60%;display:none}
   #reticle{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px;border:2px solid rgba(255,255,255,.5);border-radius:50%}
   #map{width:min(78vw,380px);height:min(78vw,380px)}
+  .edu{background:#121829;border:1px solid var(--line);border-radius:18px;padding:16px 18px;max-width:620px;width:100%;text-align:left}
+  .edu-head{display:flex;align-items:center;gap:10px;font-size:clamp(12px,3.2vw,16px);margin-bottom:8px}
+  .edu-face{width:30px;height:30px;border-radius:50%;flex:none;box-shadow:0 0 16px currentColor}
+  .edu-txt{font-size:clamp(15px,4vw,19px);line-height:1.45;color:var(--text);margin-bottom:8px}
+  .edu-lab{font-size:clamp(13px,3.4vw,16px);line-height:1.4;color:var(--muted);margin-bottom:10px}
+  .edu-btns{margin-bottom:10px}
+  .edu-say{background:transparent;color:var(--acc);border:2px solid var(--acc);border-radius:12px;padding:7px 14px;font-size:clamp(13px,3.4vw,16px);cursor:pointer}
+  .edu-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:clamp(11px,3vw,14px);color:var(--muted)}
+  .edu-chip{background:transparent;border:1.5px solid;border-radius:20px;padding:4px 10px;font-size:clamp(11px,3vw,14px);cursor:pointer}
+  #end{justify-content:flex-start;padding-top:4vh;padding-bottom:6vh}
   #redflash{position:fixed;inset:0;background:#ff1030;opacity:0;pointer-events:none;z-index:6;transition:opacity .35s}
 </style>
 </head>
@@ -50,7 +60,7 @@
   <a class="mono small" href="index.html" style="color:var(--acc);text-decoration:none">← TODOS LOS JUEGOS</a>
   <div class="mono small">LABORATORIO DE EMOCIONES · IRENE FONDÓN</div>
   <h1 class="mono">CAZA DE EMOCIONES</h1>
-  <p class="sub">Hay emociones flotando por la sala. Mira a tu alrededor con el móvil y tócalas para cazarlas. Tienes 60 segundos.</p>
+  <p class="sub">Hay emociones flotando por la sala. Mira a tu alrededor con el móvil y tócalas para cazarlas. Consigue <b>30 puntos</b> antes de que pasen 60 segundos.</p>
   <div class="rules">
     <span class="ic" style="background:conic-gradient(#F6C344,#7FA3C9,#FF5C7A,#FF7A2E,#A8D63A,#B38CFF,#7EE0C8,#F6C344)"></span><span><b>Emociones:</b> 1 punto cada una. Si cazas seguido, ¡combo!</span>
     <span class="ic" style="background:radial-gradient(circle,#fff6b0,#F6C344 60%,#a07a00)"></span><span><b>Emoción dorada:</b> rara y rápida, ¡+5!</span>
@@ -65,6 +75,8 @@
   <div class="mono small">TU MAPA DE EMOCIONES</div>
   <h1 class="mono" id="endTitle"></h1>
   <p class="sub" id="endText"></p>
+  <div class="edu" id="edu"></div>
+  <div class="mono small">TU MAPA (MODELO DE RUSSELL)</div>
   <canvas id="map" width="800" height="800"></canvas>
   <p class="small" id="endMore"></p>
   <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center"><button class="go" id="again">OTRA VEZ ▶</button><button class="sec" id="save">GUARDAR IMAGEN</button></div>
@@ -72,7 +84,7 @@
 </section>
 
 <div id="hud">
-  <div id="top"><div class="pill mono" id="time">60</div><div class="pill mono" id="score">0 puntos</div></div>
+  <div id="top"><div class="pill mono" id="time">60</div><div class="pill mono" id="score">0 / 30</div></div>
   <div id="mission" class="mono"></div>
   <div id="reticle"></div>
   <div id="arrows"></div>
@@ -96,6 +108,55 @@
 (() => {
 "use strict";
 const $ = id => document.getElementById(id);
+// ===== Explicación educativa contada por las propias emociones (común a los dos juegos) =====
+const EDU = {
+  alegria: {
+    n: "Alegría", c: "#F6C344",
+    t: "¡Hola! Soy la Alegría. En el mapa de Russell vivo arriba a la derecha: soy agradable y te doy energía. Aparezco cuando consigues algo o compartes un buen rato, y te empujo a repetirlo y a acercarte a los demás. Para despertarme con música se suelen usar ritmos rápidos y tonos mayores.",
+  },
+  tristeza: {
+    n: "Tristeza", c: "#7FA3C9",
+    t: "Hola, soy la Tristeza. Vivo abajo a la izquierda del mapa: soy desagradable y te dejo con poca energía. Aunque no lo parezca, sirvo para algo: te hago ir más despacio cuando pierdes algo importante y ayudo a que los demás se den cuenta de que necesitas apoyo. Mi música suele ser lenta y en tono menor.",
+  },
+  miedo: {
+    n: "Miedo", c: "#FF5C7A",
+    t: "¡Buh! Soy el Miedo. Vivo arriba a la izquierda: desagradable y con mucha activación. Soy tu alarma: cuando detecto un peligro, tu corazón se acelera y tu cuerpo se prepara para huir o protegerse. Sin mí no tendrías cuidado al cruzar la calle.",
+  },
+  ira: {
+    n: "Ira", c: "#FF7A2E",
+    t: "Soy la Ira. Vivo arriba a la izquierda, muy alto: desagradable y con muchísima activación. Aparezco cuando algo te parece injusto o alguien bloquea lo que quieres. Te doy energía para defender tus límites. El truco está en usar esa energía para decir lo que sientes, no para hacer daño.",
+  },
+  asco: {
+    n: "Asco", c: "#A8D63A",
+    t: "Puaj, soy el Asco. Soy desagradable pero no te activo tanto. Mi trabajo original es protegerte de comida estropeada o de cosas que podrían ponerte enfermo: por eso arrugas la nariz y te apartas. Con el tiempo también aprendí a reaccionar ante cosas que nos parecen moralmente feas.",
+  },
+  sorpresa: {
+    n: "Sorpresa", c: "#B38CFF",
+    t: "¡Oh! Soy la Sorpresa, la emoción más breve de todas. Te activo muchísimo, pero no soy ni buena ni mala: depende de lo que venga después. Abro tus ojos y tu atención para que entiendas qué ha pasado de repente, y enseguida dejo paso a otra emoción.",
+  },
+  calma: {
+    n: "Calma", c: "#7EE0C8",
+    t: "Hola, soy la Calma. Vivo abajo a la derecha: agradable y con poca activación. Aparezco cuando te sientes a salvo, y le doy a tu cuerpo tiempo para recuperarse: respiras más despacio y tu corazón va más tranquilo. En realidad virtual se me suele invitar con paisajes abiertos, agua y música suave.",
+  },
+};
+const EDU_LAB = "En el laboratorio de Irene te pondríamos unas gafas de realidad virtual y una diadema EEG para ver qué cambia en tu actividad cerebral al sentirnos. Los artefactos rojos del juego son el \"ruido\" que hay que limpiar de esa señal. Y recuerda: ninguna emoción es mala, todas servimos para algo.";
+function eduSpeak(text){
+  try{ if (!window.speechSynthesis) return; speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = "es-ES"; u.rate = 1;
+    const v = speechSynthesis.getVoices().find(v => /^es/i.test(v.lang)); if (v) u.voice = v; speechSynthesis.speak(u); }catch(e){}
+}
+function eduStop(){ try{ if (window.speechSynthesis) speechSynthesis.cancel(); }catch(e){} }
+// Pinta el bocadillo en "box" con la emoción "k" y botones para conocer a las demás
+function eduRender(box, k, intro){
+  const e = EDU[k], keys = Object.keys(EDU);
+  box.innerHTML = `<div class="edu-head"><span class="edu-face" style="background:${e.c}"></span><span class="mono" style="color:${e.c}">${intro || "TE HABLA LA EMOCIÓN"} · ${e.n.toUpperCase()}</span></div>
+    <p class="edu-txt">${e.t}</p><p class="edu-lab">${EDU_LAB}</p>
+    <div class="edu-btns"><button class="edu-say mono">ESCUCHAR</button></div>
+    <div class="edu-chips"><span class="mono">Conoce a las demás:</span>${keys.filter(x => x !== k).map(x => `<button class="edu-chip mono" data-k="${x}" style="border-color:${EDU[x].c};color:${EDU[x].c}">${EDU[x].n}</button>`).join("")}</div>`;
+  box.querySelector(".edu-say").onclick = () => eduSpeak(e.t + " " + EDU_LAB);
+  box.querySelectorAll(".edu-chip").forEach(b => b.onclick = () => { eduStop(); eduRender(box, b.dataset.k, "TE HABLA LA EMOCIÓN"); });
+}
+
+const META = 30;
 const R = (a, b) => a + Math.random() * (b - a);
 const pickA = a => a[Math.floor(Math.random() * a.length)];
 
@@ -264,10 +325,12 @@ function tap(x, y){
     if (combo === 3 || combo === 6) banner("COMBO ×" + (combo >= 6 ? 3 : 2), "#2EE6C5");
     if (mission && !missionDone && o.k === mission.k && (counts[o.k] || 0) >= mission.n){ missionDone = true; points += 10; setTimeout(() => banner("¡MISIÓN CUMPLIDA! +10", "#F6C344"), 300); sGold(); }
   }
-  updateHud(); setTimeout(() => { if (playing) spawn(); }, frenzy ? 150 : 400);
+  updateHud();
+  if (points >= META && playing){ playing = false; banner("¡META CONSEGUIDA!", "#2EE6C5"); sGold(); setTimeout(() => finish(true), 1300); return; }
+  setTimeout(() => { if (playing) spawn(); }, frenzy ? 150 : 400);
 }
 function updateHud(){
-  $("score").textContent = points + (points === 1 ? " punto" : " puntos");
+  $("score").textContent = points + " / " + META;
   $("bar").innerHTML = KEYS.map(k => `<div class="c" style="border-color:${EMO[k].c}"><b style="color:${EMO[k].c}">${counts[k] || 0}</b>${EMO[k].n}</div>`).join("");
   if (mission){ const n = Math.min(mission.n, counts[mission.k] || 0); $("mission").innerHTML = missionDone ? `<span style="color:var(--gold)">✓ MISIÓN CUMPLIDA</span>` : `MISIÓN: caza ${mission.n} de <span style="color:${EMO[mission.k].c}">${EMO[mission.k].n}</span> · ${n}/${mission.n}`; }
 }
@@ -294,7 +357,7 @@ async function begin(){
   try{ if (typeof DeviceOrientationEvent !== "undefined" && typeof DeviceOrientationEvent.requestPermission === "function") await DeviceOrientationEvent.requestPermission(); }catch(e){}
   try{ if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)(); actx.resume(); }catch(e){}
   if (!$("cam").srcObject) await startCam();
-  mons.forEach(o => scene.remove(o.g)); mons = []; counts = {}; points = caught = bad = gold = combo = maxCombo = 0; frenzy = false; missionDone = false;
+  eduStop(); mons.forEach(o => scene.remove(o.g)); mons = []; counts = {}; points = caught = bad = gold = combo = maxCombo = 0; frenzy = false; missionDone = false;
   mission = {k: pickA(KEYS), n: 3};
   $("start").classList.remove("on"); $("end").classList.remove("on"); $("hud").style.display = "block"; $("time").classList.remove("fr"); $("time").textContent = "60";
   updateHud();
@@ -306,13 +369,15 @@ async function begin(){
   banner("MISIÓN: caza 3 de " + EMO[mission.k].n, EMO[mission.k].c);
   playing = true; tEnd = performance.now() + 60000; nextGold = performance.now() + R(8000, 14000);
 }
-function finish(){
-  playing = false; $("hud").style.display = "none"; mons.forEach(o => scene.remove(o.g)); mons = [];
+function finish(won){
+  playing = false; const used = Math.round(60 - Math.max(0, (tEnd - performance.now())/1000)); $("hud").style.display = "none"; mons.forEach(o => scene.remove(o.g)); mons = [];
   let best = null; for (const k of KEYS) if ((counts[k] || 0) > (best ? counts[best] || 0 : 0)) best = k;
-  $("endTitle").textContent = points + " PUNTOS"; $("endTitle").style.color = best ? EMO[best].c : "var(--acc)";
+  $("endTitle").textContent = won ? "¡META! EN " + used + " S" : points + " / " + META + " PUNTOS"; $("endTitle").style.color = best ? EMO[best].c : "var(--acc)";
   $("endText").innerHTML = best ? `Tu especialidad: <b style="color:${EMO[best].c}">${EMO[best].n}</b> (${counts[best]})` : "¡No has cazado ninguna! Prueba otra vez.";
+  if (!won) $("endText").innerHTML += best ? "<br><span style=\"color:var(--muted);font-size:.85em\">¡Casi! La próxima vez llegas a la meta.</span>" : "";
+  eduRender($("edu"), best || pickA(KEYS), best ? "TU EMOCIÓN ESTRELLA TE HABLA" : "TE HABLA LA EMOCIÓN");
   $("endMore").innerHTML = `${caught} emociones · ${gold} doradas · ${bad} artefactos tocados · mejor combo ${maxCombo}` + (missionDone ? " · misión cumplida ✓" : "");
-  drawMap(); $("end").classList.add("on");
+  drawMap(); $("end").classList.add("on"); $("end").scrollTop = 0;
 }
 function drawMap(){
   const cv = $("map"), x = cv.getContext("2d"), S = cv.width, m = 70;
@@ -331,7 +396,7 @@ function saveImage(){
   const W = 900, H = 1180, c = document.createElement("canvas"); c.width = W; c.height = H; const x = c.getContext("2d");
   x.fillStyle = "#0B0F1A"; x.fillRect(0, 0, W, H); x.textAlign = "center";
   x.fillStyle = "#8C9BB8"; x.font = "bold 26px Consolas, monospace"; x.fillText("CAZA DE EMOCIONES · LABORATORIO DE EMOCIONES", W/2, 60);
-  x.fillStyle = $("endTitle").style.color || "#2EE6C5"; x.font = "bold 76px Consolas, monospace"; x.fillText(points + " PUNTOS", W/2, 150);
+  x.fillStyle = $("endTitle").style.color || "#2EE6C5"; x.font = "bold 70px Consolas, monospace"; x.fillText($("endTitle").textContent, W/2, 150);
   x.fillStyle = "#EAF2FF"; x.font = "34px Segoe UI, sans-serif"; x.fillText($("endText").textContent, W/2, 210);
   x.drawImage($("map"), 50, 250, 800, 800);
   x.fillStyle = "#8C9BB8"; x.font = "24px Segoe UI, sans-serif"; x.fillText($("endMore").textContent, W/2, 1100);
