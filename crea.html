@@ -11,18 +11,22 @@
   .mono{font-family:Consolas,"Courier New",monospace;font-weight:700;letter-spacing:.05em}
   canvas#gl{position:absolute;inset:0;display:block}
   #menu{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3.6vh;background:radial-gradient(ellipse at center,#141c33 0%,#0B0F1A 70%);z-index:5;transition:opacity .6s}
-  .edu{background:#121829;border:1px solid var(--line);border-radius:18px;padding:16px 18px;max-width:620px;width:100%;text-align:left}
-  .edu-head{display:flex;align-items:center;gap:10px;font-size:clamp(12px,3.2vw,16px);margin-bottom:8px}
-  .edu-face{width:30px;height:30px;border-radius:50%;flex:none;box-shadow:0 0 16px currentColor}
-  .edu-txt{font-size:clamp(15px,4vw,19px);line-height:1.45;color:var(--text);margin-bottom:8px}
-  .edu-lab{font-size:clamp(13px,3.4vw,16px);line-height:1.4;color:var(--muted);margin-bottom:10px}
-  .edu-btns{margin-bottom:10px}
-  .edu-say{background:transparent;color:var(--acc);border:2px solid var(--acc);border-radius:12px;padding:7px 14px;font-size:clamp(13px,3.4vw,16px);cursor:pointer}
+  .edu{background:#121829;border:1px solid var(--line);border-radius:18px;padding:14px 16px;max-width:640px;width:100%;text-align:left}
+  .edu-head{font-size:clamp(12px,3.2vw,16px);margin-bottom:8px}
+  .edu-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:12px}
+  .edu-char{flex:none;width:clamp(78px,22vw,120px);height:clamp(78px,22vw,120px)}
+  .edu-char svg{width:100%;height:100%;overflow:visible}
+  .edu-bub{position:relative;flex:1;background:#0B0F1A;border:2px solid;border-radius:16px;padding:12px 14px;min-height:clamp(78px,22vw,120px);cursor:pointer}
+  .edu-bub:before{content:"";position:absolute;left:-11px;top:26px;border:10px solid transparent;border-right-color:inherit;border-left:0}
+  .edu-txt{font-size:clamp(15px,4vw,19px);line-height:1.45;color:var(--text);margin-bottom:6px;min-height:1.4em}
+  .edu-lab{font-size:clamp(13px,3.4vw,16px);line-height:1.4;color:var(--muted)}
+  .edu-skip{font-size:12px;color:var(--muted);text-align:right}
   .edu-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:clamp(11px,3vw,14px);color:var(--muted)}
-  .edu-chip{background:transparent;border:1.5px solid;border-radius:20px;padding:4px 10px;font-size:clamp(11px,3vw,14px);cursor:pointer}
+  .edu-chip{background:transparent;border:1.5px solid;border-radius:20px;padding:5px 11px;font-size:clamp(11px,3vw,14px);cursor:pointer}
+  .edu-chip:hover{background:rgba(255,255,255,.06)}
   #eduWrap{position:fixed;inset:0;z-index:20;display:none;flex-direction:column;align-items:center;justify-content:flex-start;gap:14px;padding:5vh 5vw;overflow-y:auto;background:rgba(11,15,26,.9)}
   #eduWrap.on{display:flex}
-  #eduWrap .edu{margin-top:auto} #eduClose{margin-bottom:auto;font-family:Consolas,monospace;font-weight:700;font-size:clamp(15px,4vw,20px);background:var(--acc);color:#06221D;border:none;border-radius:14px;padding:12px 24px;cursor:pointer}
+  #eduWrap .edu{margin-top:auto} #eduClose{margin-bottom:auto;font-family:Consolas,monospace;font-weight:700;font-size:clamp(15px,4vw,20px);background:var(--acc);color:#06221D;border:none;border-radius:14px;padding:12px 24px;cursor:pointer;box-shadow:0 5px 0 #179C84}
   #menu.hide{opacity:0;pointer-events:none}
   #menu h1{font-size:clamp(30px,5vw,84px);color:var(--acc);text-shadow:0 0 24px rgba(46,230,197,.35)}
   #menu p{font-size:clamp(15px,1.6vw,26px);color:var(--muted);max-width:74vw;text-align:center}
@@ -86,10 +90,10 @@
 <div id="menu">
   <div class="mono" style="color:var(--muted);font-size:clamp(11px,1.1vw,18px)">LABORATORIO DE EMOCIONES · IRENE FONDÓN</div>
   <h1 class="mono">CREA UNA EMOCIÓN</h1>
-  <p>Elegid una emoción. El ordenador construirá en directo un mundo y una música para provocarla.</p>
+  <p>Elegid una emoción. El programa construirá en directo un mundo y una música para provocarla.</p>
   <div class="grid" id="grid"></div>
   <p class="mono" style="font-size:clamp(11px,1vw,16px)">Las 6 emociones básicas (Ekman) + calma · Dentro: A D / ← → moverte · W S / ↑ ↓ subir y bajar · 1-7 emoción · ESPACIO otro mundo · M mapa · N silencio · ESC volver (y la emoción te cuenta quién es)</p>
-  <div style="display:flex;gap:3vw"><a class="mono" href="index.html" style="color:var(--acc);font-size:clamp(11px,1vw,16px)">← Todos los juegos</a><a class="mono" href="caza.html" style="color:var(--gold);font-size:clamp(11px,1vw,16px)">¿Con el móvil? Juega a Caza de emociones →</a></div>
+  <div style="display:flex;gap:3vw"><a class="mono" href="index.html" style="color:var(--acc);font-size:clamp(11px,1vw,16px)">← Todos los juegos</a><a class="mono" href="caza.html" style="color:var(--gold);font-size:clamp(11px,1vw,16px)">¿Te atreves a cazarlas? Juega a Caza de emociones →</a></div>
 </div>
 
 <div id="hud">
@@ -134,52 +138,108 @@ const hsl = (h, s, l) => new THREE.Color().setHSL((((h % 360) + 360) % 360) / 36
 // REGLAS DE CADA EMOCIÓN (las 6 básicas de Ekman + calma)
 // va/ar: posición aproximada en el mapa de Russell (valencia, activación)
 // =====================================================================
-// ===== Explicación educativa contada por las propias emociones (común a los dos juegos) =====
+// ===== Explicación educativa contada por un personaje de cada emoción (común a los dos juegos) =====
 const EDU = {
-  alegria: {
-    n: "Alegría", c: "#F6C344",
-    t: "¡Hola! Soy la Alegría. En el mapa de Russell vivo arriba a la derecha: soy agradable y te doy energía. Aparezco cuando consigues algo o compartes un buen rato, y te empujo a repetirlo y a acercarte a los demás. Para despertarme con música se suelen usar ritmos rápidos y tonos mayores.",
-  },
-  tristeza: {
-    n: "Tristeza", c: "#7FA3C9",
-    t: "Hola, soy la Tristeza. Vivo abajo a la izquierda del mapa: soy desagradable y te dejo con poca energía. Aunque no lo parezca, sirvo para algo: te hago ir más despacio cuando pierdes algo importante y ayudo a que los demás se den cuenta de que necesitas apoyo. Mi música suele ser lenta y en tono menor.",
-  },
-  miedo: {
-    n: "Miedo", c: "#FF5C7A",
-    t: "¡Buh! Soy el Miedo. Vivo arriba a la izquierda: desagradable y con mucha activación. Soy tu alarma: cuando detecto un peligro, tu corazón se acelera y tu cuerpo se prepara para huir o protegerse. Sin mí no tendrías cuidado al cruzar la calle.",
-  },
-  ira: {
-    n: "Ira", c: "#FF7A2E",
-    t: "Soy la Ira. Vivo arriba a la izquierda, muy alto: desagradable y con muchísima activación. Aparezco cuando algo te parece injusto o alguien bloquea lo que quieres. Te doy energía para defender tus límites. El truco está en usar esa energía para decir lo que sientes, no para hacer daño.",
-  },
-  asco: {
-    n: "Asco", c: "#A8D63A",
-    t: "Puaj, soy el Asco. Soy desagradable pero no te activo tanto. Mi trabajo original es protegerte de comida estropeada o de cosas que podrían ponerte enfermo: por eso arrugas la nariz y te apartas. Con el tiempo también aprendí a reaccionar ante cosas que nos parecen moralmente feas.",
-  },
-  sorpresa: {
-    n: "Sorpresa", c: "#B38CFF",
-    t: "¡Oh! Soy la Sorpresa, la emoción más breve de todas. Te activo muchísimo, pero no soy ni buena ni mala: depende de lo que venga después. Abro tus ojos y tu atención para que entiendas qué ha pasado de repente, y enseguida dejo paso a otra emoción.",
-  },
-  calma: {
-    n: "Calma", c: "#7EE0C8",
-    t: "Hola, soy la Calma. Vivo abajo a la derecha: agradable y con poca activación. Aparezco cuando te sientes a salvo, y le doy a tu cuerpo tiempo para recuperarse: respiras más despacio y tu corazón va más tranquilo. En realidad virtual se me suele invitar con paisajes abiertos, agua y música suave.",
-  },
+  alegria: { n: "Alegría", c: "#F6C344",
+    t: "¡Hola! Soy la Alegría. En el mapa de Russell vivo arriba a la derecha: soy agradable y te doy energía. Aparezco cuando consigues algo o compartes un buen rato, y te empujo a repetirlo y a acercarte a los demás. Para despertarme con música se suelen usar ritmos rápidos y tonos mayores." },
+  tristeza: { n: "Tristeza", c: "#7FA3C9",
+    t: "Hola... soy la Tristeza. Vivo abajo a la izquierda del mapa: soy desagradable y te dejo con poca energía. Aunque no lo parezca, sirvo para algo: te hago ir más despacio cuando pierdes algo importante y ayudo a que los demás se den cuenta de que necesitas apoyo. Mi música suele ser lenta y en tono menor." },
+  miedo: { n: "Miedo", c: "#FF5C7A",
+    t: "¡Buh! Soy el Miedo. Vivo arriba a la izquierda: desagradable y con mucha activación. Soy tu alarma: cuando detecto un peligro, tu corazón se acelera y tu cuerpo se prepara para huir o protegerse. Sin mí no tendrías cuidado al cruzar la calle." },
+  ira: { n: "Ira", c: "#FF7A2E",
+    t: "¡Grrr! Soy la Ira. Vivo arriba a la izquierda, muy alto: desagradable y con muchísima activación. Aparezco cuando algo te parece injusto o alguien bloquea lo que quieres. Te doy energía para defender tus límites. El truco está en usarla para decir lo que sientes, no para hacer daño." },
+  asco: { n: "Asco", c: "#A8D63A",
+    t: "Puaj, soy el Asco. Soy desagradable pero no te activo tanto. Mi trabajo original es protegerte de comida estropeada o de cosas que podrían ponerte enfermo: por eso arrugas la nariz y te apartas. Con el tiempo también aprendí a reaccionar ante cosas que nos parecen moralmente feas." },
+  sorpresa: { n: "Sorpresa", c: "#B38CFF",
+    t: "¡Oh! Soy la Sorpresa, la emoción más breve de todas. Te activo muchísimo, pero no soy ni buena ni mala: depende de lo que venga después. Abro tus ojos y tu atención para que entiendas qué ha pasado de repente, y enseguida dejo paso a otra emoción." },
+  calma: { n: "Calma", c: "#7EE0C8",
+    t: "Hola, soy la Calma. Vivo abajo a la derecha: agradable y con poca activación. Aparezco cuando te sientes a salvo y le doy a tu cuerpo tiempo para recuperarse: respiras más despacio y tu corazón va más tranquilo. En realidad virtual se me suele invitar con paisajes abiertos, agua y música suave." },
 };
 const EDU_LAB = "En el laboratorio de Irene te pondríamos unas gafas de realidad virtual y una diadema EEG para ver qué cambia en tu actividad cerebral al sentirnos. Los artefactos rojos del juego son el \"ruido\" que hay que limpiar de esa señal. Y recuerda: ninguna emoción es mala, todas servimos para algo.";
-function eduSpeak(text){
-  try{ if (!window.speechSynthesis) return; speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = "es-ES"; u.rate = 1;
-    const v = speechSynthesis.getVoices().find(v => /^es/i.test(v.lang)); if (v) u.voice = v; speechSynthesis.speak(u); }catch(e){}
-}
-function eduStop(){ try{ if (window.speechSynthesis) speechSynthesis.cancel(); }catch(e){} }
-// Pinta el bocadillo en "box" con la emoción "k" y botones para conocer a las demás
+
+// ---- personajes (SVG) ----
+const EDU_ART = {
+  alegria: `<g class="ea-flap"><ellipse cx="30" cy="38" rx="22" ry="17" fill="#F6C344" transform="rotate(-25 30 38)"/><ellipse cx="70" cy="38" rx="22" ry="17" fill="#F6C344" transform="rotate(25 70 38)"/><ellipse cx="33" cy="66" rx="14" ry="11" fill="#FF9FC0"/><ellipse cx="67" cy="66" rx="14" ry="11" fill="#FF9FC0"/></g>
+    <ellipse cx="50" cy="52" rx="10" ry="24" fill="#5a3b1a"/><circle cx="50" cy="34" r="13" fill="#ffe27a"/><path d="M44 21 Q40 10 34 9 M56 21 Q60 10 66 9" stroke="#5a3b1a" stroke-width="2" fill="none"/>
+    <path d="M44 32 q2 -3 4 0 M52 32 q2 -3 4 0" stroke="#3a2a10" stroke-width="2" fill="none"/><path d="M44 38 Q50 45 56 38" stroke="#3a2a10" stroke-width="2.2" fill="#ff7a8a"/>`,
+  tristeza: `<g><circle cx="34" cy="42" r="16" fill="#9fb4cc"/><circle cx="52" cy="34" r="20" fill="#9fb4cc"/><circle cx="68" cy="44" r="15" fill="#9fb4cc"/><rect x="24" y="40" width="56" height="18" rx="9" fill="#9fb4cc"/></g>
+    <path d="M40 40 l6 3 M62 40 l-6 3" stroke="#34475e" stroke-width="2"/><circle cx="44" cy="46" r="2.6" fill="#34475e"/><circle cx="58" cy="46" r="2.6" fill="#34475e"/><path d="M45 55 Q51 50 57 55" stroke="#34475e" stroke-width="2" fill="none"/>
+    <path class="ea-drop" d="M40 66 q-3 6 0 8 q3 -2 0 -8z" fill="#5b8cff"/><path class="ea-drop d2" d="M54 66 q-3 6 0 8 q3 -2 0 -8z" fill="#5b8cff"/><path class="ea-drop d3" d="M66 64 q-3 6 0 8 q3 -2 0 -8z" fill="#5b8cff"/>`,
+  miedo: `<g class="ea-shake"><path d="M26 86 V46 a24 24 0 0 1 48 0 V86 l-8 -7 l-8 7 l-8 -7 l-8 7 l-8 -7z" fill="#f4f7ff"/>
+    <ellipse cx="41" cy="46" rx="6" ry="8" fill="#1a1a2a"/><ellipse cx="59" cy="46" rx="6" ry="8" fill="#1a1a2a"/><circle cx="42" cy="44" r="2" fill="#fff"/><circle cx="60" cy="44" r="2" fill="#fff"/>
+    <ellipse cx="50" cy="63" rx="5" ry="7" fill="#1a1a2a"/><path d="M33 36 l8 -4 M67 36 l-8 -4" stroke="#1a1a2a" stroke-width="2"/></g>`,
+  ira: `<g class="ea-flick"><path d="M50 8 C62 24 80 30 78 56 C76 78 62 88 50 88 C38 88 24 78 22 56 C21 40 34 36 36 22 C42 32 46 30 50 8z" fill="#FF7A2E"/><path d="M50 34 C58 44 66 50 64 64 C62 76 56 80 50 80 C44 80 38 76 36 64 C35 54 44 50 50 34z" fill="#ffc24a"/></g>
+    <path d="M36 52 l12 6 M64 52 l-12 6" stroke="#5a0a00" stroke-width="4" stroke-linecap="round"/><circle cx="43" cy="61" r="3" fill="#5a0a00"/><circle cx="57" cy="61" r="3" fill="#5a0a00"/><path d="M42 74 Q50 68 58 74" stroke="#5a0a00" stroke-width="3" fill="none"/>`,
+  asco: `<path class="ea-wob" d="M22 80 C16 60 26 36 50 34 C74 32 86 58 78 80 Z" fill="#A8D63A"/><path d="M30 80 q3 6 6 0 M60 80 q3 7 6 0" fill="#A8D63A"/>
+    <path d="M38 52 l8 2 M62 52 l-8 2" stroke="#2a3a08" stroke-width="2.5"/><circle cx="42" cy="58" r="3" fill="#2a3a08"/><circle cx="58" cy="58" r="3" fill="#2a3a08"/><path d="M40 70 q5 -4 10 0 q5 4 10 0" stroke="#2a3a08" stroke-width="2.5" fill="none"/><path d="M50 71 q2 6 6 6" stroke="#ff7a8a" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <g class="ea-fly"><circle cx="20" cy="26" r="2.5" fill="#222"/><ellipse cx="18" cy="23" rx="3" ry="1.6" fill="#cde"/></g><g class="ea-fly f2"><circle cx="80" cy="22" r="2.5" fill="#222"/><ellipse cx="82" cy="19" rx="3" ry="1.6" fill="#cde"/></g>`,
+  sorpresa: `<rect x="24" y="52" width="52" height="38" rx="4" fill="#B38CFF"/><rect x="46" y="52" width="8" height="38" fill="#F6C344"/>
+    <circle cx="40" cy="68" r="5" fill="#fff"/><circle cx="60" cy="68" r="5" fill="#fff"/><circle cx="40" cy="68" r="2.4" fill="#2a1a4a"/><circle cx="60" cy="68" r="2.4" fill="#2a1a4a"/><ellipse cx="50" cy="81" rx="4" ry="5" fill="#2a1a4a"/>
+    <g class="ea-lid"><rect x="20" y="42" width="60" height="11" rx="3" fill="#9a6cf0"/><rect x="46" y="42" width="8" height="11" fill="#F6C344"/><path d="M50 42 q-12 -12 -16 -4 q4 6 16 4 q12 -12 16 -4 q-4 6 -16 4" fill="#F6C344"/></g>
+    <path class="ea-star" d="M50 6 l4 9 10 1 -8 6 3 10 -9 -6 -9 6 3 -10 -8 -6 10 -1z" fill="#fff2a0"/>`,
+  calma: `<g class="ea-float"><path d="M22 50 a28 26 0 0 1 56 0 q-7 6 -14 0 q-7 6 -14 0 q-7 6 -14 0 q-7 6 -14 0z" fill="#7EE0C8" opacity=".95"/>
+    <path d="M40 40 q3 3 6 0 M54 40 q3 3 6 0" stroke="#1f5a50" stroke-width="2" fill="none"/><path d="M45 47 Q50 50 55 47" stroke="#1f5a50" stroke-width="2" fill="none"/><circle cx="36" cy="46" r="3" fill="#ffb3c6" opacity=".7"/><circle cx="64" cy="46" r="3" fill="#ffb3c6" opacity=".7"/>
+    <g class="ea-tent" stroke="#7EE0C8" stroke-width="3" fill="none" stroke-linecap="round"><path d="M30 54 q-4 10 2 18 q4 8 -2 16"/><path d="M43 55 q4 10 -2 18 q-4 8 2 14"/><path d="M57 55 q-4 10 2 18 q4 8 -2 14"/><path d="M70 54 q4 10 -2 18 q-4 8 2 16"/></g></g>`,
+};
+const EDU_CSS_ANIM = `
+@keyframes eaflap{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.55)}} .ea-flap{transform-origin:50px 50px;animation:eaflap .5s infinite}
+@keyframes eadrop{0%{transform:translateY(0);opacity:1}100%{transform:translateY(18px);opacity:0}} .ea-drop{animation:eadrop 1.3s infinite} .ea-drop.d2{animation-delay:.45s} .ea-drop.d3{animation-delay:.9s}
+@keyframes eashake{0%,100%{transform:translate(0,0)}25%{transform:translate(-1.5px,1px)}75%{transform:translate(1.5px,-1px)}} .ea-shake{animation:eashake .12s infinite}
+@keyframes eaflick{0%,100%{transform:scale(1,1)}50%{transform:scale(1.05,.95)}} .ea-flick{transform-origin:50px 88px;animation:eaflick .25s infinite}
+@keyframes eawob{0%,100%{transform:scale(1,1)}50%{transform:scale(1.04,.96)}} .ea-wob{transform-origin:50px 80px;animation:eawob 1.2s infinite}
+@keyframes eafly{0%{transform:translate(0,0)}25%{transform:translate(12px,6px)}50%{transform:translate(4px,14px)}75%{transform:translate(-8px,5px)}100%{transform:translate(0,0)}} .ea-fly{animation:eafly 1.4s infinite} .ea-fly.f2{animation-duration:1.1s;animation-direction:reverse}
+@keyframes ealid{0%,60%,100%{transform:translateY(0) rotate(0)}70%{transform:translateY(-14px) rotate(-8deg)}85%{transform:translateY(-10px) rotate(5deg)}} .ea-lid{transform-origin:50px 48px;animation:ealid 2.2s infinite}
+@keyframes eastar{0%,55%{transform:scale(0);opacity:0}70%{transform:scale(1.2);opacity:1}100%{transform:scale(1);opacity:0}} .ea-star{transform-origin:50px 18px;animation:eastar 2.2s infinite}
+@keyframes eafloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}} .ea-float{animation:eafloat 3s ease-in-out infinite}
+@keyframes eatent{0%,100%{transform:skewX(0)}50%{transform:skewX(6deg)}} .ea-tent{transform-origin:50px 55px;animation:eatent 2s ease-in-out infinite}
+.edu-char.talk svg{animation:eatalk .18s infinite alternate} @keyframes eatalk{from{transform:translateY(0)}to{transform:translateY(-3px)}}`;
+(() => { const st = document.createElement("style"); st.textContent = EDU_CSS_ANIM; document.head.appendChild(st); })();
+
+// ---- sonidos de cada personaje (sin voz: un sonido propio y "pitidos" al hablar, como en los videojuegos) ----
+let eduAC = null;
+function eduCtx(){ try{ if (!eduAC) eduAC = new (window.AudioContext || window.webkitAudioContext)(); if (eduAC.state === "suspended") eduAC.resume(); }catch(e){} return eduAC; }
+function eduTone(f, type, t, dur, vol, f2, vib){ const a = eduAC, o = a.createOscillator(), g = a.createGain(); o.type = type; o.frequency.setValueAtTime(f, t); if (f2) o.frequency.exponentialRampToValueAtTime(f2, t + dur);
+  if (vib){ const l = a.createOscillator(), lg = a.createGain(); l.frequency.value = vib; lg.gain.value = f * .06; l.connect(lg); lg.connect(o.frequency); l.start(t); l.stop(t + dur + .05); }
+  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + .01); g.gain.exponentialRampToValueAtTime(.001, t + dur); o.connect(g); g.connect(a.destination); o.start(t); o.stop(t + dur + .05); }
+const EDU_SFX = {
+  alegria: t => [0, 4, 7, 12, 16].forEach((s, i) => eduTone(660 * Math.pow(2, s/12), "triangle", t + i*.07, .18, .18)),
+  tristeza: t => { eduTone(392, "sine", t, .9, .2, 220, 5); eduTone(330, "sine", t + .5, 1.1, .14, 196, 4); },
+  miedo: t => { eduTone(300, "square", t, .9, .07, 520, 14); eduTone(310, "sine", t, .9, .12, 540, 9); },
+  ira: t => { eduTone(90, "sawtooth", t, .6, .25, 70, 22); eduTone(120, "square", t + .05, .5, .1, 80, 30); },
+  asco: t => { eduTone(220, "square", t, .5, .12, 90, 12); eduTone(160, "sawtooth", t + .1, .45, .08, 70); },
+  sorpresa: t => { eduTone(300, "triangle", t, .35, .2, 1400); eduTone(1400, "sine", t + .3, .25, .12, 1800); },
+  calma: t => [0, 7, 12].forEach((s, i) => eduTone(523 * Math.pow(2, s/12), "sine", t + i*.35, 1.4, .12)),
+};
+const EDU_BLIP = {
+  alegria: () => [ "triangle", 750 + Math.random()*300, .12 ], tristeza: () => [ "sine", 250 + Math.random()*50, .14 ],
+  miedo: () => [ "square", 380 + Math.random()*160, .05 ], ira: () => [ "sawtooth", 120 + Math.random()*40, .09 ],
+  asco: () => [ "square", 150 + Math.random()*50, .06 ], sorpresa: () => [ "triangle", 600 + Math.random()*600, .1 ],
+  calma: () => [ "sine", 430 + Math.random()*60, .1 ],
+};
+let eduTimer = null;
+function eduStop(){ clearInterval(eduTimer); eduTimer = null; }
+
+// Pinta el personaje y su bocadillo en "box"; el texto aparece letra a letra con su sonido
 function eduRender(box, k, intro){
+  eduStop();
   const e = EDU[k], keys = Object.keys(EDU);
-  box.innerHTML = `<div class="edu-head"><span class="edu-face" style="background:${e.c}"></span><span class="mono" style="color:${e.c}">${intro || "TE HABLA LA EMOCIÓN"} · ${e.n.toUpperCase()}</span></div>
-    <p class="edu-txt">${e.t}</p><p class="edu-lab">${EDU_LAB}</p>
-    <div class="edu-btns"><button class="edu-say mono">ESCUCHAR</button></div>
+  box.innerHTML = `<div class="edu-head mono" style="color:${e.c}">${intro || "TE HABLA"} · ${e.n.toUpperCase()}</div>
+    <div class="edu-row"><div class="edu-char talk"><svg viewBox="0 0 100 100">${EDU_ART[k]}</svg></div>
+    <div class="edu-bub" style="border-color:${e.c}"><p class="edu-txt"></p><p class="edu-lab"></p><div class="edu-skip mono">toca para leer todo ▸</div></div></div>
     <div class="edu-chips"><span class="mono">Conoce a las demás:</span>${keys.filter(x => x !== k).map(x => `<button class="edu-chip mono" data-k="${x}" style="border-color:${EDU[x].c};color:${EDU[x].c}">${EDU[x].n}</button>`).join("")}</div>`;
-  box.querySelector(".edu-say").onclick = () => eduSpeak(e.t + " " + EDU_LAB);
-  box.querySelectorAll(".edu-chip").forEach(b => b.onclick = () => { eduStop(); eduRender(box, b.dataset.k, "TE HABLA LA EMOCIÓN"); });
+  box.querySelectorAll(".edu-chip").forEach(b => b.onclick = () => eduRender(box, b.dataset.k, "TE HABLA"));
+  const txt = box.querySelector(".edu-txt"), lab = box.querySelector(".edu-lab"), ch = box.querySelector(".edu-char"), skip = box.querySelector(".edu-skip");
+  const a = eduCtx(); if (a) try{ EDU_SFX[k](a.currentTime + .05); }catch(err){}
+  let i = 0;
+  const done = () => { eduStop(); txt.textContent = e.t; lab.textContent = EDU_LAB; ch.classList.remove("talk"); skip.style.display = "none"; };
+  box.querySelector(".edu-bub").onclick = done;
+  setTimeout(() => { if (!box.contains(txt)) return;
+    const t0 = performance.now(); let lastBlip = 0;
+    eduTimer = setInterval(() => {
+      i = Math.min(e.t.length, Math.floor((performance.now() - t0) / 30)); txt.textContent = e.t.slice(0, i);
+      if (i - lastBlip >= 3 && eduAC){ lastBlip = i; const [ty, f, v] = EDU_BLIP[k](); try{ eduTone(f, ty, eduAC.currentTime, .06, v * .6); }catch(err){} }
+      if (i >= e.t.length) done();
+    }, 30); }, 450);
 }
 
 const EMO = {
@@ -647,7 +707,7 @@ function drawBig(w){
   x.strokeStyle = "rgba(255,255,255,.5)"; x.setLineDash([6, 6]); x.beginPath(); x.moveTo(cx, cy); x.lineTo(tx, ty); x.stroke(); x.setLineDash([]);
   x.fillStyle = "#fff"; x.beginPath(); x.arc(cx, cy, 11, 0, 6.28); x.fill(); x.strokeStyle = "#0B0F1A"; x.lineWidth = 4; x.stroke();
 }
-function toMenu(){ const was = running ? curEmo() : null; if (was){ eduRender($("edu"), was, "ANTES DE IRTE, TE HABLA LA EMOCIÓN"); $("eduWrap").classList.add("on"); }
+function toMenu(){ const was = running ? curEmo() : null; if (was){ eduRender($("edu"), was, "ANTES DE IRTE, TE HABLA"); $("eduWrap").classList.add("on"); }
   running = false; audio.stop(); if (mapMode) exitMap(); clearGame(); $("touch").classList.remove("on"); $("menu").classList.remove("hide"); $("hud").style.display = "none"; }
 // Sorpresa: cosas inesperadas cada pocos segundos
 function surpriseEvent(){
@@ -679,7 +739,7 @@ addEventListener("keydown", e => {
   if ($("eduWrap").classList.contains("on")){ if (e.code === "Escape" || e.code === "Enter") closeEdu(); return; }
   const d = e.code.match(/^(Digit|Numpad)([1-7])$/); if (d) setEmotion(ORDER[+d[2] - 1]);
   if (e.code === "Space" && emoKey){ e.preventDefault(); setEmotion(mapMode ? dominant : emoKey); }
-  if (e.code === "Escape"){ if ($("eduWrap").classList.contains("on")) closeEdu(); else toMenu(); }
+  if (e.code === "Escape") toMenu();
   if (e.code === "KeyN") audio.toggleMute();
   if (e.code === "KeyM" && running){ if (mapMode) exitMap(); else enterMap(); }
   if (e.code.startsWith("Arrow")) e.preventDefault();
