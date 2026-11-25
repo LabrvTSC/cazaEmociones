@@ -20,14 +20,15 @@
   .emos span{display:flex;align-items:center;gap:6px;font-size:clamp(12px,3.3vw,15px);background:var(--panel);border:1px solid var(--line);border-radius:30px;padding:5px 12px}
   .emos i{width:12px;height:12px;border-radius:50%}
   .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px;margin-top:34px}
-  a.card{display:flex;flex-direction:column;text-decoration:none;color:var(--text);background:var(--panel);border:2px solid var(--line);border-radius:22px;overflow:hidden;transition:transform .15s,border-color .15s}
-  a.card:hover,a.card:focus{transform:translateY(-5px);border-color:var(--acc);outline:none}
+  div.card{display:flex;flex-direction:column;text-decoration:none;color:var(--text);background:var(--panel);border:2px solid var(--line);border-radius:22px;overflow:hidden;transition:transform .15s,border-color .15s}
+  div.card:hover{border-color:#36507a}
   .art{height:190px;position:relative;overflow:hidden}
   .body{padding:20px 22px 24px;display:flex;flex-direction:column;gap:10px;flex:1}
   .tag{align-self:flex-start;font-size:12px;padding:4px 10px;border-radius:20px;border:1px solid}
   h2{font-size:clamp(22px,6vw,30px)}
   .body p{color:#cfd9ee;line-height:1.45;font-size:16px}
-  .btn{margin-top:auto;align-self:flex-start;background:var(--acc);color:#06221D;border-radius:12px;padding:12px 22px;font-size:18px;box-shadow:0 5px 0 #179C84}
+  .btn{margin-top:auto;align-self:flex-start;background:var(--acc);color:#06221D;border-radius:12px;padding:12px 22px;font-size:18px;box-shadow:0 5px 0 #179C84;text-decoration:none;cursor:pointer;transition:transform .1s,box-shadow .1s,filter .1s}
+  .btn:hover{filter:brightness(1.1)} .btn:active{transform:translateY(4px);box-shadow:0 1px 0 #179C84}
   /* arte caza: emociones orbitando */
   .orbit{position:absolute;inset:0;background:radial-gradient(circle at 50% 120%,#3a2a6a,#121829 70%)}
   .orbit b{position:absolute;width:34px;height:34px;border-radius:50%;left:50%;top:50%;margin:-17px;animation:orb 9s linear infinite;box-shadow:0 0 18px currentColor}
@@ -50,25 +51,25 @@
   </header>
 
   <div class="grid">
-    <a class="card" href="caza.html">
+    <div class="card">
       <div class="art"><div class="orbit" id="orbit"></div><div class="phone"></div></div>
       <div class="body">
-        <span class="tag mono" style="color:var(--gold);border-color:var(--gold)">MÓVIL · REALIDAD AUMENTADA</span>
+        <span class="tag mono" style="color:var(--gold);border-color:var(--gold)">MÓVIL Y ORDENADOR · REALIDAD AUMENTADA</span>
         <h2 class="mono">Caza de emociones</h2>
-        <p>Mira a tu alrededor con la cámara del móvil: hay emociones flotando por la sala. Cázalas en 60 segundos y descubre tu mapa de emociones.</p>
-        <span class="btn mono">JUGAR ▶</span>
+        <p>Hay emociones flotando a tu alrededor: búscalas con la cámara del móvil o con el ratón en el ordenador. Llega a 30 puntos, cumple misiones y descubre tu mapa de emociones.</p>
+        <a class="btn mono" href="caza.html">JUGAR ▶</a>
       </div>
-    </a>
-    <a class="card" href="crea.html">
+    </div>
+    <div class="card">
       <div class="art"><div class="land"><div class="sun"></div>
         <svg viewBox="0 0 400 140" preserveAspectRatio="none"><path d="M0 70 Q50 30 100 60 T200 55 T300 45 T400 60 V140 H0Z" fill="#78c94f"/><path d="M0 100 Q60 70 120 95 T240 90 T400 85 V140 H0Z" fill="#2f9a4f"/></svg></div></div>
       <div class="body">
-        <span class="tag mono" style="color:var(--acc);border-color:var(--acc)">ORDENADOR · MUNDOS 3D Y MÚSICA</span>
+        <span class="tag mono" style="color:var(--acc);border-color:var(--acc)">MÓVIL Y ORDENADOR · MUNDOS 3D Y MÚSICA</span>
         <h2 class="mono">Crea una emoción</h2>
-        <p>Elige una emoción y el ordenador construye en directo un mundo y una música para provocarla. Viaja por el mapa de emociones y mira cómo cambia todo.</p>
-        <span class="btn mono">JUGAR ▶</span>
+        <p>Elige una emoción y el programa construye en directo un mundo y una música para provocarla. Viaja por el mapa de emociones y mira cómo cambia todo.</p>
+        <a class="btn mono" href="crea.html">JUGAR ▶</a>
       </div>
-    </a>
+    </div>
   </div>
 
   <footer>Las 6 emociones básicas (Ekman) + calma, colocadas en el mapa de emociones de Russell.<br>Hecho para la charla "Mi viaje al mundo virtual" · Ciencia y Tecnología en Femenino · Sevilla TechPark</footer>
