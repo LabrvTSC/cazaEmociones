@@ -20,8 +20,8 @@
   .emos span{display:flex;align-items:center;gap:6px;font-size:clamp(12px,3.3vw,15px);background:var(--panel);border:1px solid var(--line);border-radius:30px;padding:5px 12px}
   .emos i{width:12px;height:12px;border-radius:50%}
   .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px;margin-top:34px}
-  div.card{display:flex;flex-direction:column;text-decoration:none;color:var(--text);background:var(--panel);border:2px solid var(--line);border-radius:22px;overflow:hidden;transition:transform .15s,border-color .15s}
-  div.card:hover{border-color:#36507a}
+  a.card{display:flex;cursor:pointer;flex-direction:column;text-decoration:none;color:var(--text);background:var(--panel);border:2px solid var(--line);border-radius:22px;overflow:hidden;transition:transform .15s,border-color .15s}
+  a.card:hover,a.card:focus{transform:translateY(-5px);border-color:var(--acc);outline:none} a.card:active{transform:translateY(-1px)}
   .art{height:190px;position:relative;overflow:hidden}
   .body{padding:20px 22px 24px;display:flex;flex-direction:column;gap:10px;flex:1}
   .tag{align-self:flex-start;font-size:12px;padding:4px 10px;border-radius:20px;border:1px solid}
@@ -51,25 +51,23 @@
   </header>
 
   <div class="grid">
-    <div class="card">
+    <a class="card" href="caza.html">
       <div class="art"><div class="orbit" id="orbit"></div><div class="phone"></div></div>
       <div class="body">
-        <span class="tag mono" style="color:var(--gold);border-color:var(--gold)">MÓVIL Y ORDENADOR · REALIDAD AUMENTADA</span>
+        <span class="tag mono" style="color:var(--gold);border-color:var(--gold)">REALIDAD AUMENTADA</span>
         <h2 class="mono">Caza de emociones</h2>
         <p>Hay emociones flotando a tu alrededor: búscalas con la cámara del móvil o con el ratón en el ordenador. Llega a 30 puntos, cumple misiones y descubre tu mapa de emociones.</p>
-        <a class="btn mono" href="caza.html">JUGAR ▶</a>
       </div>
-    </div>
-    <div class="card">
+    </a>
+    <a class="card" href="crea.html">
       <div class="art"><div class="land"><div class="sun"></div>
         <svg viewBox="0 0 400 140" preserveAspectRatio="none"><path d="M0 70 Q50 30 100 60 T200 55 T300 45 T400 60 V140 H0Z" fill="#78c94f"/><path d="M0 100 Q60 70 120 95 T240 90 T400 85 V140 H0Z" fill="#2f9a4f"/></svg></div></div>
       <div class="body">
-        <span class="tag mono" style="color:var(--acc);border-color:var(--acc)">MÓVIL Y ORDENADOR · MUNDOS 3D Y MÚSICA</span>
+        <span class="tag mono" style="color:var(--acc);border-color:var(--acc)">MUNDOS 3D Y MÚSICA</span>
         <h2 class="mono">Crea una emoción</h2>
         <p>Elige una emoción y el programa construye en directo un mundo y una música para provocarla. Viaja por el mapa de emociones y mira cómo cambia todo.</p>
-        <a class="btn mono" href="crea.html">JUGAR ▶</a>
       </div>
-    </div>
+    </a>
   </div>
 
   <footer>Las 6 emociones básicas (Ekman) + calma, colocadas en el mapa de emociones de Russell.<br>Hecho para la charla "Mi viaje al mundo virtual" · Ciencia y Tecnología en Femenino · Sevilla TechPark</footer>
